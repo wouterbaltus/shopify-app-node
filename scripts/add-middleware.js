@@ -4,8 +4,6 @@ const parseExpression = require('@babel/parser').parseExpression;
 const traverse = require('@babel/traverse').default;
 const generate = require('@babel/generator').default;
 const prettier = require('prettier');
-const pathOr = require('ramda/src/pathOr');
-
 
 const addMiddleware = (filetoWrite, middleware) => {
   const fileLocation = filetoWrite

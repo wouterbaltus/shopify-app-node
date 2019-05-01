@@ -5,8 +5,7 @@ import next from 'next';
 import createShopifyAuth, { verifyRequest } from '@shopify/koa-shopify-auth'
 import dotenv from 'dotenv';
 import session from 'koa-session';
-import proxy, { ApiVersion } from '@shopify/koa-shopify-graphql-proxy';
-
+import { confirmationUrl } from './middlewares/recurring-billing'
 dotenv.config();
 
 const port = parseInt(process.env.PORT, 10) || 3000;
@@ -29,8 +28,9 @@ app.prepare().then(() => {
       async afterAuth(ctx) {
 
         const { shop, accessToken } = ctx.session;
-
-        ctx.redirect(confirmationUrl);
+        const redirect = await confirmationUrl(shop, accessToken)
+        console.log(confirmationUrl)
+        ctx.redirect(redirect);
       },
     }),
   );

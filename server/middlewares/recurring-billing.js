@@ -1,4 +1,8 @@
-const mutation = `
+require('isomorphic-fetch');
+
+export const confirmationUrl = (shop, accessToken) => {
+
+  const mutation = `
          mutation {
            appSubscriptionCreate(
                name: "Super Duper Plan"
@@ -34,7 +38,7 @@ const mutation = `
          }
          `
 
-getConfirmationUrl = () => {
+
   const endpoint = `https://${shop}/admin/api/unstable/graphql.json`
   const options = {
     method: "POST",
@@ -46,7 +50,9 @@ getConfirmationUrl = () => {
     },
     body: JSON.stringify({ query: mutation })
   }
-  const confirmationUrl = await fetch(endpoint, options)
+
+
+  return fetch(endpoint, options)
     .then(res => res.json())
     .then((jsonData) => (jsonData.data.appSubscriptionCreate.confirmationUrl))
     .catch(console.error);
