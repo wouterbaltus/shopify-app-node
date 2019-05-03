@@ -12,6 +12,7 @@ const addMiddleware = (fileToWrite, middleware) => {
   const ast = parser(file, { sourceType: 'module' });
 
   let lastServer;
+  let sessionAssignment;
 
   // Traverse the AST to find the nodes we need.
   traverse(ast, {
@@ -26,11 +27,19 @@ const addMiddleware = (fileToWrite, middleware) => {
     //   }
     // },
 
-    ExpressionStatement(path) {
-      const variableinAuth = get(path, ['node', 'expression', 'callee', 'type'])
-      console.log(variableinAuth)
+    VariableDeclaration(path) {
+      const variableinAuth = get(path, ['node', 'declarations'])[0]
+      const properties = get(variableinAuth, ['id', 'properties'])
+      if (properties) {
+        properties.filter((prop) => {
+          return get(prop, ['key', 'name']) == 'shop';
+        });
+        sessionAssignment = variableinAuth;
+      }
     }
   })
+
+  console.log(sessionAssignment)
 
   // const code = middleware
   // lastServer.insertAfter(parseExpression(code));
