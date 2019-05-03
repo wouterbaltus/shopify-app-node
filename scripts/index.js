@@ -9,7 +9,7 @@ function receiveArgs() {
       generatePage('pages', process.argv);
       break;
     case 'add-billing':
-      addMiddleware('server/server.js', 'fart/fart/fart/fart');
+      addMiddleware('server/server.js', 'server.use(fakeOneForNow())');
       break
     default:
       console.log('Please provide a command');

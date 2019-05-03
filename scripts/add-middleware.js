@@ -4,9 +4,10 @@ const parseExpression = require('@babel/parser').parseExpression;
 const traverse = require('@babel/traverse').default;
 const generate = require('@babel/generator').default;
 const prettier = require('prettier');
+const get = require('lodash/get');
 
-const addMiddleware = (filetoWrite, middleware) => {
-  const fileLocation = filetoWrite
+const addMiddleware = (fileToWrite, middleware) => {
+  const fileLocation = fileToWrite
   const file = fs.readFileSync(fileLocation).toString();
   const ast = parser(file, { sourceType: 'module' });
 
@@ -14,33 +15,33 @@ const addMiddleware = (filetoWrite, middleware) => {
 
   // Traverse the AST to find the nodes we need.
   traverse(ast, {
-    ImportDeclaration(path) {
-      lastImport = path;
-    },
+    //this works to find the last Server
+    // ExpressionStatement(path) {
+    //   const object = get(path, ['node', 'expression', 'callee', 'object', 'name'], '')
+    //   const property = get(path, ['node', 'expression', 'callee', 'property', 'name'], '')
+    //   if (
+    //     object === 'server' && property === 'use'
+    //   ) {
+    //     lastServer = path;
+    //   }
+    // },
 
     ExpressionStatement(path) {
-      if (
-        path.node.expression &&
-        path.node.expression.callee &&
-        path.node.expression.callee.object &&
-        path.node.expression.callee.property &&
-        path.node.expression.callee.object.name == 'server' &&
-        path.node.expression.callee.property.name == 'use'
-      ) {
-        lastServer = path;
-      }
-    },
+      const variableinAuth = get(path, ['node', 'expression', 'callee', 'type'])
+      console.log(variableinAuth)
+    }
   })
 
-  const code = middleware
-  lastServer.insertAfter(parseExpression(code));
+  // const code = middleware
+  // lastServer.insertAfter(parseExpression(code));
 
-  const newCode = generate(ast).code
+  // const newCode = generate(ast).code
 
-  const prettifiedCode = prettier.format(newCode, { parser: 'babel' })
-  fs.writeFile('transformed.js', prettifiedCode, (err) => {
-    if (err) throw new Error(`${err}`)
-  });
+  // const prettifiedCode = prettier.format(newCode, { parser: 'babel' })
+  // fs.writeFile('transformed.js', prettifiedCode, (err) => {
+  //   if (err) throw new Error(`${err}`)
+  //   console.log(`Billing scaffold was successfully added to ${fileToWrite}!`)
+  // });
 };
 
 module.exports = addMiddleware;

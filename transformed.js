@@ -7,7 +7,7 @@ import next from "next";
 import createShopifyAuth, { verifyRequest } from "@shopify/koa-shopify-auth";
 import dotenv from "dotenv";
 import session from "koa-session";
-import proxy, { ApiVersion } from "@shopify/koa-shopify-graphql-proxy";
+import { confirmationUrl } from "./middlewares/recurring-billing";
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== "production";
@@ -28,7 +28,7 @@ app.prepare().then(() => {
 
       async afterAuth(ctx) {
         const { shop, accessToken } = ctx.session;
-        ctx.redirect(confirmationUrl);
+        ctx.redirect("/");
       }
     })
   );
@@ -39,7 +39,7 @@ app.prepare().then(() => {
     ctx.res.statusCode = 200;
     return;
   });
-  this.will.be.middle;
+  server.use(fakeOneForNow());
   server.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
   });

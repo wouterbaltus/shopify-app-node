@@ -28,9 +28,7 @@ app.prepare().then(() => {
       async afterAuth(ctx) {
 
         const { shop, accessToken } = ctx.session;
-        const redirect = await confirmationUrl(shop, accessToken)
-        console.log(confirmationUrl)
-        ctx.redirect(redirect);
+        ctx.redirect('/');
       },
     }),
   );
