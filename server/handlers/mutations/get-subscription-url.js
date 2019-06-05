@@ -12,7 +12,7 @@ export function RECURRING_CREATE(url) {
           {
             plan: {
               appUsagePricingDetails: {
-                  cappedAmount: { amount: 10, currencyCode: USD }
+                  cappedAmount: { amount: 15, currencyCode: USD }
                   terms: "$1 for 1000 emails"
               }
             }
@@ -20,7 +20,7 @@ export function RECURRING_CREATE(url) {
           {
             plan: {
               appRecurringPricingDetails: {
-                  price: { amount: 10, currencyCode: USD }
+                  price: { amount: 15, currencyCode: USD }
               }
             }
           }
